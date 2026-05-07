@@ -1,12 +1,11 @@
+import { catchError, of } from 'rxjs';
+
 import { AccountService } from '@app/_services';
 
 export function appInitializer(accountService: AccountService) {
     return () => accountService.refreshToken()
-        .toPromise()
-        .then(() => {
-            // success
-        })
-        .catch(() => {
-            // error, but app should still load
-        });
+        .pipe(
+            // catch error to start app on success or failure
+            catchError(() => of())
+        );
 }
